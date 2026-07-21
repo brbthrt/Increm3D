@@ -1,13 +1,19 @@
-# Incremental 3D Reconstruction using Structure from Motion
+# Incremental 3D Reconstruction and Data Analysis
 
-This project implements an incremental Structure from Motion (SfM) pipeline for 3D object reconstruction from multiple images using Python and OpenCV.
+This project implements an incremental Structure from Motion (SfM) pipeline for 3D object reconstruction from multiple images using Python, OpenCV, and Open3D. 
+In addition to the reconstruction pipeline, the project performs data collection, exploratory data analysis (EDA), statistical analysis, and PostgreSQL integration.
 
-The program:
-- detects and matches image features using SIFT,
-- estimates camera motion,
-- triangulates 3D points,
-- incrementally reconstructs a sparse 3D scene,
-- visualizes the reconstructed point cloud and mesh.
+[//]: # (The program:)
+
+[//]: # (- detects and matches image features using SIFT,)
+
+[//]: # (- estimates camera motion,)
+
+[//]: # (- triangulates 3D points,)
+
+[//]: # (- incrementally reconstructs a sparse 3D scene,)
+
+[//]: # (- visualizes the reconstructed point cloud and mesh.)
 
 ---
 
