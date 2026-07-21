@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df=pd.read_csv('dataset.csv')
+df=pd.read_csv('../dataset.csv')
 print(df.head())
 
 plt.figure(figsize=(8,5))
