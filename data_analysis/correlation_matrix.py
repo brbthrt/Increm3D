@@ -4,6 +4,7 @@ import seaborn as sns
 
 df=pd.read_csv('../dataset.csv')
 
+# compute correlation martix for numerical features
 corr=df.drop(columns=['width', 'height']).corr(numeric_only=True)
 
 plt.figure(figsize=(10,8))

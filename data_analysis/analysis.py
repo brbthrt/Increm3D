@@ -1,10 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
+# load reconstruction metrics from dataset.csv
 df=pd.read_csv('../dataset.csv')
 print(df.head())
 
+# visualize features
 plt.figure(figsize=(8,5))
 plt.hist(df["keypoints"], bins=20)
 plt.title("distribution of keypoints")

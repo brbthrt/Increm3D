@@ -3,13 +3,16 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 
+# load environment variables
 load_dotenv()
 
+# connect to PostgresSQL database
 connection=psycopg2.connect(host=os.getenv('DB_HOST'),port=os.getenv('DB_PORT'), database=os.getenv('DB_NAME'), user=os.getenv('DB_USER'), password=os.getenv('DB_PASSWORD'))
 
 cursor=connection.cursor()
 
 df=pd.read_csv('../dataset.csv')
+
 for _, row in df.iterrows():
     cursor.execute(
         'INSERT INTO Images(filename, width, height, keypoints,'
@@ -31,6 +34,7 @@ for _, row in df.iterrows():
         )
     )
 
+# save changes to rhe database
 connection.commit()
 
 cursor.close()
