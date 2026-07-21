@@ -3,6 +3,10 @@
 This project implements an incremental Structure from Motion (SfM) pipeline for 3D object reconstruction from multiple images using Python, OpenCV, and Open3D. 
 In addition to the reconstruction pipeline, the project performs data collection, exploratory data analysis (EDA), statistical analysis, and PostgreSQL integration.
 
+<p align="center">
+  <img src="img/dino_far.png" alt="3D Reconstruction" width="550">
+</p>
+
 [//]: # (The program:)
 
 [//]: # (- detects and matches image features using SIFT,)
@@ -19,6 +23,8 @@ In addition to the reconstruction pipeline, the project performs data collection
 
 # Features
 
+## 3D Reconstruction
+
 - SIFT feature detection and matching
 - Essential matrix estimation
 - Camera pose recovery
@@ -28,17 +34,71 @@ In addition to the reconstruction pipeline, the project performs data collection
 - Colored point cloud generation
 - 3D visualization with Open3D
 - Mesh reconstruction using Alpha Shapes
+- 
+
+## Data Collection
+
+- image resolution
+- number of detected keypoints
+- number of feature matches
+- image blur (variance of Laplacian)
+- image brightness
+- image contrast
+- processing time
+- reprojection error
+- number of newly reconstructed 3D points
+These metrics are exported to dataset.csv.
+
+---
+
+# Exploratory Data Analysis
+
+The project performs exploratory data analysis using **Pandas**, **Matplotlib**, and **Seaborn**.
+
+Implement analyses include:
+- Descriptive statistics
+- Histograms
+- Scatter plots
+- Boxplots
+- Correlation matrix
+- Quartile analysis
+
+Generated visualization:
+- Distribution of detected keypoints
+- Distribution of processing time
+- Feature matches boxplot
+- Blur vs processing time
+- Matches vs reconstructed 3D points
+- Correlation matrix
+
+---
+
+# PostgreSQL Integration
+
+The generated dataset can be imported into PostgreSQL.
+
+The project includes:
+
+- CSV loading
+- Automatic insertion into PostgreSQL
+- Environment variables using `.env`
+- Secure database connection with `python-dotenv`
 
 ---
 
 # Project Structure
 
 ```text
-Mincrem3D/
+Increm3D/
 │
 ├── img/
-│   └── dino/
-│       ├── *.jpg / *.png / *.ppm
+│
+├── data_analysis/
+│   ├── analysis.py
+│   ├── dataset_statistics.py
+│   ├── correlation_matrix.py
+│   ├── database.py
+│   └── results/
 │
 ├── colors.py
 ├── config.py
@@ -47,103 +107,39 @@ Mincrem3D/
 ├── utils.py
 ├── visualization.py
 ├── main.py
+├── main_with_errors.py
+├── dataset.csv
+├── reconstruction_stats.png
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-# Requirements
+# Technologies
 
-- Python 3.10+
+- Python
 - OpenCV
 - NumPy
+- Pandas
 - Matplotlib
+- Seaborn
+- PostgreSQL
+- psycopg2
 - Open3D
 
 ---
 
-# Installation (PyCharm)
+# Installation
 
-This project is intended to be run using PyCharm IDE.
+## 1. Clone repository
 
----
+## 2. Create virtual environment 
 
-## 1. Clone repository in PyCharm
+## 3. Install dependencies 'requirements.txt'
 
-1. Open **PyCharm**
-2. Click **Get from VCS**
-3. Paste repository URL:
-   ```
-   https://github.com/YOUR_USERNAME/Mincrem3D.git
-   ```
-4. Choose local folder
-5. Click **Clone**
-
----
-
-## 2. Create virtual environment (PyCharm)
-
-1. Go to **File → Settings → Project → Python Interpreter**
-2. Click **Add Interpreter**
-3. Select **Virtualenv Environment**
-4. Choose:
-   - New environment
-   - Location: `venv/`
-   - Base interpreter: your Python version
-5. Click **OK**
-
-PyCharm will automatically create and activate the virtual environment.
-
----
-
-## 3. Install dependencies (PyCharm)
-
-1. Open `requirements.txt`
-2. PyCharm will show a prompt:
-   **Install requirements?**
-3. Click **Install**
-
-OR manually:
-- Go to **Python Interpreter**
-- Click **+**
-- Search and install:
-  - numpy
-  - opencv-python
-  - matplotlib
-  - open3d
-
----
-
-## 4. Run the project (PyCharm)
-
-1. Open `main.py`
-2. Right-click inside the file
-3. Click **Run 'main'**
-
-OR:
-- Click green ▶ button in the top-right corner
-
----
-
-# Requirements File
-
-Make sure `requirements.txt` contains:
-
-```text
-numpy==2.2.5
-opencv-python==4.11.0.86
-matplotlib==3.10.1
-open3d==0.19.0
-```
-
----
-
-# Notes
-
-- No need to manually run `venv\Scripts\activate` in PyCharm
-- No need to use terminal for installation
-- PyCharm manages environment automatically
+## 4. Run the project 
 
 ---
 
@@ -170,12 +166,63 @@ For every next frame:
 ## 5. Error Estimation
 The reprojection error is computed for evaluating reconstruction quality.
 
-## 6. Visualization
-The program:
-- builds a colored point cloud
-- removes outliers
-- reconstructs a mesh
-- visualizes the result using Open3D
+## 6. Dataset Generation
+For every processed image, the following metrics are collected:
+
+- image resolution;
+- number of detected keypoints;
+- number of feature matches;
+- blur (Variance of Laplacian);
+- brightness;
+- contrast;
+- processing time;
+- reprojection error;
+- number of newly reconstructed 3D points.
+
+The collected information is exported to **dataset.csv**.
+
+## 7. Compute reconstruction quality metrics.
+The generated dataset is analyzed using **Pandas**, **Matplotlib**, and **Seaborn**.
+
+The analysis includes:
+
+- descriptive statistics;
+- histograms;
+- boxplots;
+- scatter plots;
+- correlation matrix.
+
+
+## 8. Database Integration
+The generated dataset is imported into a PostgreSQL database for structured storage and further analysis.
+
+## 9. Visualization
+The reconstruction pipeline produces:
+
+- sparse 3D point cloud;
+- reconstructed mesh;
+- reconstruction statistics;
+- analytical charts.
+
+## 10. Store the dataset in PostgreSQL.
+
+---
+
+# Dataset Description
+
+| Feature | Description |
+|----------|-------------|
+| image | Image filename |
+| width | Image width |
+| height | Image height |
+| keypoints | Number of detected keypoints |
+| matches | Number of feature matches |
+| blur | Image blur (Variance of Laplacian) |
+| brightness | Average pixel intensity |
+| contrast | Standard deviation of pixel intensities |
+| processing_time | Processing time (seconds) |
+| reprojection_error | Average reprojection error |
+| new_points | Number of newly reconstructed 3D points |
 
 ---
 
@@ -184,7 +231,7 @@ The program:
 Place input images inside:
 
 ```text
-img/dino/
+img/
 ```
 
 Dataset:
@@ -208,12 +255,19 @@ The program generates:
 - sparse 3D point cloud
 - reconstructed mesh
 - reprojection error graph
-- statistics of added 3D points
+- Reconstruction statistics
+- CSV dataset
+- Descriptive statistics
+- Histograms
+- Scatter plots
+- Boxplots
+- Correlation matrix
+- PostgreSQL database records
 
-Saved file:
+Saved directory:
 
 ```text
-reconstruction_stats.png
+data_analysis/results
 ```
 
 ---
