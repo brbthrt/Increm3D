@@ -4,7 +4,7 @@ This project implements an incremental Structure from Motion (SfM) pipeline for 
 In addition to the reconstruction pipeline, the project performs data collection, exploratory data analysis (EDA), statistical analysis, and PostgreSQL integration.
 
 <p align="center">
-  <img src="img/dino_far.png" alt="3D Reconstruction" width="550">
+  <img src="img/dino_3d/dino_far.png" alt="3D Reconstruction" width="550">
 </p>
 
 [//]: # (The program:)
