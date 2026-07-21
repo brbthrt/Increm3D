@@ -8,7 +8,9 @@ import features
 import triangulation
 import colors
 import visualization
-
+import time
+import pandas as pd
+import  dataset_analysis as da
 
 def calculate_reprojection_error(p3d, p2d, P_ext, K):
 
@@ -28,12 +30,15 @@ def main():
 
     all_points_3d = []
     views = []
+    dataset_info=[]
     errors_history = [] # for errors
     points_added_history = [] # for points
 
     print(f"--- start processing {len(img_files)} imgs ---")
 
     for i, img_file in enumerate(img_files):
+        start_time=time.time()
+
         img_path = os.path.join(config.IMG_DIR, img_file)
         img = cv2.imread(img_path)
         if img is None: continue
@@ -54,6 +59,23 @@ def main():
             errors_history.append(0)
             points_added_history.append(0)
             print(f"[{i}] {img_file}: the base frame is set.")
+
+            processing_time = time.time() - start_time
+
+            dataset_info.append({
+                "image": img_file,
+                "width": img.shape[1],
+                "height": img.shape[0],
+                "keypoints": len(kp),
+                "matches": 0,
+                "blur": da.calculate_blur(gray),
+                "brightness": da.calculate_brightness(gray),
+                "contrast": da.calculate_contrast(gray),
+                "processing_time": processing_time,
+                "reprojection_error": 0,
+                "new_points": 0
+            })
+
             continue
 
         prev_view = views[i - 1]
@@ -142,7 +164,24 @@ def main():
             print(
                 f"[{i}] {img_file}: PnP Inliers: {num_inliers}, error: {pnp_err:.4f} px, count of added points: {added_points}")
 
+        processing_time=time.time()-start_time
+
+        dataset_info.append({
+            'image':img_file,
+            'width':img.shape[1], 'height': img.shape[0],
+            'keypoints': len(kp),
+            'matches': len(good),
+            'blur': da.calculate_blur(gray), 'brightness': da.calculate_brightness(gray), 'contrast': da.calculate_contrast(gray),
+            'processing_time': processing_time,
+            'reprojection_error': errors_history[-1],
+            'new_points': points_added_history[-1],
+
+        })
         views.append(current_view)
+
+    df=pd.DataFrame(dataset_info)
+    df.to_csv('dataset.csv', index=False)
+    print(df)
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
     fig.tight_layout(pad=5.0)
