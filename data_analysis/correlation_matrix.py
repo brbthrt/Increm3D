@@ -7,7 +7,7 @@ df=pd.read_csv('../dataset.csv')
 corr=df.drop(columns=['width', 'height']).corr(numeric_only=True)
 
 plt.figure(figsize=(10,8))
-sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f')
+sns.heatmap(corr, annot=True, fmt='.2f')
 plt.title('correlation matrix')
 plt.tight_layout()
 plt.savefig('results/correlation_matrix.png')
